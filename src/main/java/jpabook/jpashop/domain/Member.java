@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+    @NotEmpty // @Valid 적용 - @ResquestBody로 Member 객체 받을 때, name은 empty이면 에러
     private String name;
 
     @Embedded
