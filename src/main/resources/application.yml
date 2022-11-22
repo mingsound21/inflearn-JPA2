@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none # create 였는데 데이터 자꾸 생성해야해서 변경함
+      ddl-auto: create # create 였는데 데이터 자꾸 생성해야해서 변경함
     properties:
       hibernate:
     # show_sql: true
