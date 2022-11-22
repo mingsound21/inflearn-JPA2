@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
+    @JsonIgnore// 간단한 주문조회 V1: 엔티티 직접 노출에서 Order로 다시 돌아가서 무한루프 생김 방지를 위한 코드
     @OneToOne(mappedBy = "delivery", fetch = LAZY) // 연관관계의 주인 X
     private Order order;
 

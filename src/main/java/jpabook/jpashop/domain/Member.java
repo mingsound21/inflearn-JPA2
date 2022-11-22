@@ -24,7 +24,8 @@ public class Member {
     @Embedded
     private Address address;
 
-    // @JsonIgnore // 회원조회V1일 때, orders 제외하고 싶어서 => 엔티티에 presentation 계층을 위한 로직 포함됨(BAD)
+    @JsonIgnore // 회원조회V1일 때, orders 제외하고 싶어서 => 엔티티에 presentation 계층을 위한 로직 포함됨(BAD)
+                // 간단한 주문조회 V1: 엔티티 직접 노출에서 Order로 다시 돌아가서 무한루프 생김 방지를 위한 코드
     @OneToMany(mappedBy = "member") // 연관관계의 주인 X
     private List<Order> orders = new ArrayList<>(); // 컬렉션은 필드에서 바로 초기화하는 것이 null 문제에서 안전
 

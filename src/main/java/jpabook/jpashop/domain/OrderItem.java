@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpabook.jpashop.domain.item.Item;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,7 +23,8 @@ public class OrderItem {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "item_id") // 연관관계의 주인
     private Item item;
-    
+
+    @JsonIgnore// 간단한 주문조회 V1: 엔티티 직접 노출에서 Order로 다시 돌아가서 무한루프 생김 방지를 위한 코드
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "order_id") // 연관관계의 주인
     private Order order;
