@@ -5,9 +5,7 @@ import jpabook.jpashop.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -36,8 +34,26 @@ public class MemberApiController {
     }
     // V2는 Member Entity의 스펙 변경해도, API 스펙 영향을 받지 않음
 
+
+    /**
+     * 회원 수정
+     */
+    @PutMapping("/api/v1/members/{id}")
+    public UpdateMemberResponse updateMemberResponseV2(
+            @PathVariable("id") Long id,
+            @RequestBody @Valid UpdateMemberRequest request){
+
+        memberService.update(id, request.getName());
+        Member findMember = memberService.findMember(id);
+        return new UpdateMemberResponse(findMember.getId(), findMember.getName());
+    }
+
     /**
      * DTO
+     */
+
+    /**
+     * 등록
      */
     @Data
     static class CreateMemberRequest{
@@ -50,4 +66,21 @@ public class MemberApiController {
     static class CreateMemberResponse{
         private Long id;
     }
+
+    /**
+     * 수정
+     */
+    @Data
+    static class UpdateMemberRequest{
+        @NotEmpty
+        private String name;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class UpdateMemberResponse{
+        private Long id;
+        private String name;
+    }
+
 }
