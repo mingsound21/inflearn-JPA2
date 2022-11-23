@@ -49,6 +49,21 @@ public class OrderApiController {
     // Entity를 외부로 노출하지 말라는 것은 완전히 Entity에 대한 의존을 끊어야 한다는 말
     // => OrderDto안에 OrderItem은 또 다시 Entity
 
+    // SQL 수: 1
+    @GetMapping("/api/v3/orders")
+    public List<OrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findAllWithItem();
+
+        for (Order order : orders) {
+            System.out.println("order ref = " + order + " id = " + order.getId()); // 객체 참조값과 id
+        }
+
+        List<OrderDto> collect = orders.stream()
+                .map(o -> new OrderDto(o))
+                .collect(Collectors.toList());
+        return collect;
+    }
+
     @Data
     static class OrderDto{
         private Long orderId;

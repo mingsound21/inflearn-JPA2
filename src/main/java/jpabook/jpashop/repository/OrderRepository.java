@@ -123,4 +123,14 @@ public class OrderRepository {
         // 한방쿼리로 order, member, delivery 조인해서 select 절에서 모든 필드 다 가져옴
     }
 
+    // 주문 조회 V3: 컬렉션 페치 조인 최적화
+    public List<Order> findAllWithItem() {
+        return  em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" + // Order와 OrderItems를 조인
+                        " join fetch oi.item i", Order.class)
+                .getResultList();
+    }
 }
