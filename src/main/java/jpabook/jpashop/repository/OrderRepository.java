@@ -103,6 +103,18 @@ public class OrderRepository {
         return query.getResultList();
     }
 
+    // 간단한 주문 조회 V3: 페치조인 적용으로 N+1문제 해결을 위한 코드
+    public List<Order> findAllWithMemberDelivery() {
+       return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .getResultList();
+       // 페치 조인 적용
+        // select 절에서 Order와 관련있는 Member, Delivery 정보를 모두 select해옴
+        // 한방쿼리로 order, member, delivery 조인해서 select 절에서 모든 필드 다 가져옴
+    }
+
     /**
      * Querydsl
      */

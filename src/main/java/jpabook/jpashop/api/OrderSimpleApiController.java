@@ -49,7 +49,7 @@ public class OrderSimpleApiController {
      */
 
     @GetMapping("/api/v2/simple-orders")
-    public List<SimpleOrderDto> ordersV2(){
+    public List<SimpleOrderDto> ordersV2(){ // 쿼리 5방
         // N + 1 문제 -> 1(주문) +  회원 N + 배송 N
         List<Order> orders = orderRepository.findAllByString(new OrderSearch());
 
@@ -60,6 +60,14 @@ public class OrderSimpleApiController {
         return result;
     }
 
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> ordersV3(){ // 쿼리 1방
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+        List<SimpleOrderDto> result = orders.stream()
+                .map(o -> new SimpleOrderDto(o))
+                .collect(Collectors.toList());
+        return result;
+    }
 
     @Data
     static class SimpleOrderDto{
@@ -95,3 +103,6 @@ public class OrderSimpleApiController {
 
 // ===== V2 =====
 // 1. LAZY 로딩으로 인한 과다한 DB 쿼리 호출 (BAD) -> 해결 : V3의 페치 조인
+
+// ===== V2 =====
+// 1. 페치조인 SQL보면 SELECT에서 모든 필드 값들을 모두 가져옴
