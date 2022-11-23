@@ -103,6 +103,14 @@ public class OrderRepository {
         return query.getResultList();
     }
 
+    /**
+     * Querydsl
+     */
+    // 결국 동적쿼리 해결 = Querydsl
+    // 자세한 내용은 후속 강의(JPA활용2, QueryDSL에서)
+
+
+
     // 간단한 주문 조회 V3: 페치조인 적용으로 N+1문제 해결을 위한 코드
     public List<Order> findAllWithMemberDelivery() {
        return em.createQuery(
@@ -114,11 +122,5 @@ public class OrderRepository {
         // select 절에서 Order와 관련있는 Member, Delivery 정보를 모두 select해옴
         // 한방쿼리로 order, member, delivery 조인해서 select 절에서 모든 필드 다 가져옴
     }
-
-    /**
-     * Querydsl
-     */
-    // 결국 동적쿼리 해결 = Querydsl
-    // 자세한 내용은 후속 강의(JPA활용2, QueryDSL에서)
 
 }
