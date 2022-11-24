@@ -92,6 +92,13 @@ public class OrderApiController {
         return orderQueryRepository.findOrderQueryDtos();
     }
 
+
+    // SQL 수: 루트 1번 + 컬렉션 IN절 사용 1번 = 2번
+    @GetMapping("/api/v5/orders")
+    public List<OrderQueryDto> ordersV5(){
+        return orderQueryRepository.findAllByDto_optimization();
+    }
+
     @Data
     static class OrderDto{
         private Long orderId;
