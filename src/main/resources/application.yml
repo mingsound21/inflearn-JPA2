@@ -10,6 +10,7 @@ spring:
       ddl-auto: create # create 였는데 데이터 자꾸 생성해야해서 변경함
     properties:
       hibernate:
+        default_batch_fetch_size: 100
     # show_sql: true
         format_sql: true
 

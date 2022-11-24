@@ -9,6 +9,7 @@ import jpabook.jpashop.repository.OrderSearch;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -50,6 +51,7 @@ public class OrderApiController {
     // => OrderDto안에 OrderItem은 또 다시 Entity
 
     // SQL 수: 1
+    // BAD: 페치 조인 + 컬렉션 = 페이징 불가능
     @GetMapping("/api/v3/orders")
     public List<OrderDto> ordersV3() {
         List<Order> orders = orderRepository.findAllWithItem();
@@ -57,6 +59,23 @@ public class OrderApiController {
         for (Order order : orders) {
             System.out.println("order ref = " + order + " id = " + order.getId()); // 객체 참조값과 id
         }
+
+        List<OrderDto> collect = orders.stream()
+                .map(o -> new OrderDto(o))
+                .collect(Collectors.toList());
+        return collect;
+    }
+
+    // SQL 수: 3
+    // V3의 문제) SQL 수는 1개였지만, h2 DB에서 실제로 쿼리 날리고 결과를 보면 중복 컬럼이 되게 많음. => 중복 데이터 다 애플리케이션으로 전송됨 = 용량 많음 이슈
+    // BUT, V3.1은) 결과가 중복이 없음.
+    // TRADE OFF) 네트워크 호출하는 횟수(SQL수) <-> 전송하는 데이터 양  => 상황에 따라서 판단해야함
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderDto> ordersV3_page(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "100") int limit){
+
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit); // 1. ToOne관계는 모두 페치 조인 적용
 
         List<OrderDto> collect = orders.stream()
                 .map(o -> new OrderDto(o))
