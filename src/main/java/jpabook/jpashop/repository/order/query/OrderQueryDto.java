@@ -4,11 +4,14 @@ import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@EqualsAndHashCode(of = "orderId") // V6 Controller에서 groupingBy에서 묶어줄 기준으로 orderId 설정
 public class OrderQueryDto {
     private Long orderId;
     private String name;

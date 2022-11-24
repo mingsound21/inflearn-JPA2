@@ -89,7 +89,17 @@ public class OrderQueryRepository {
 
     }
 
-   
+    // V6: "쿼리 1번"에 모든 것을 가져올 수 있도록 최적화
+    public List<OrderFlatDto> findAllByDto_flat() {
+        return em.createQuery(
+                "select new jpabook.jpashop.repository.order.query.OrderFlatDto(o.id, m.name, o.orderDate, o.status, d.address, i.name, oi.orderPrice, oi.count)" +
+                        " from Order o" +
+                        " join o.member m" +
+                        " join o.delivery d" +
+                        " join o.orderItems oi" +
+                        " join oi.item i", OrderFlatDto.class)
+                .getResultList();
+    }
 }
 // Q. OrderQueryDto, OrderItemQueryDto를 왜 OrderApiController에 만들어둔 DTO를 사용하지 않고 새로 만드셨나요?
 // A. Controller에 정의해둔 DTO를 Repository에서 사용할 경우, 의존관계가 Repository -> Controller 생겨서 의존관계 순환이 생김
