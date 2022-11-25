@@ -4,11 +4,11 @@ package jpabook.jpashop.service;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true) // 읽기전용이 많으니까 이걸 기본으로 깔고
@@ -44,13 +44,13 @@ public class MemberService {
 
     //회원 1명 조회
     public Member findMember(Long memberId){
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId).get();
     }
 
     // 회원 수정
     @Transactional
     public void update(Long id, String name){
-        Member member = memberRepository.findOne(id); // 영속성 컨텍스트
+        Member member = memberRepository.findById(id).get(); // 영속성 컨텍스트
         member.setName(name); // 변경 감지
     }
     // command와 query를 철저히 분리하기 위해서 member를 반환하지 않고, void 혹은 id정도 반환
